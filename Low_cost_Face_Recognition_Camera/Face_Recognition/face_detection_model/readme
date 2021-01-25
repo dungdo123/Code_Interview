@@ -1,0 +1,3 @@
+download 2 files:
+1. deploy.prototxt
+2. res10_300x300_ssd_iter_140000.caffemodel
