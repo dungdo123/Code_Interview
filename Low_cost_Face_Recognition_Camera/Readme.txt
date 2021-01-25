@@ -13,6 +13,10 @@
    + The highest value in the temperature array was chose as temperature of object
    
 + Tool:
+ - Raspberry pi3, AMG88xx
+ - Raspbian (linux dis), python 3.
+ - OpenCV, pygame, Adafruit_AMG88xx
+ 
 + Results:
 
 The temperature checking and face detection:
