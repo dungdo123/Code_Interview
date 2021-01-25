@@ -16,7 +16,9 @@
 + Results:
 
 The temperature checking and face detection:
+https://youtu.be/bTRF4Jby9hc
 
 Thermal camera display:
+https://youtu.be/MBCObK8PoXc
 
 Face Recognition:
