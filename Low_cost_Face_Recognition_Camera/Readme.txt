@@ -24,7 +24,7 @@
  - OpenCV, pygame, Adafruit_AMG88xx
  - Pretrained model: SSD face detector, OpenFace, 
  
-+ Results:
++ Demo:
 
 The temperature checking and face detection:
 https://youtu.be/bTRF4Jby9hc
