@@ -37,3 +37,5 @@ https://youtu.be/3OVV7TnWiog
 
 + References:
 https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/
+https://github.com/adafruit/Adafruit_AMG88xx_python
+https://makersportal.com/blog/2018/1/25/heat-mapping-with-a-64-pixel-infrared-sensor-and-raspberry-pi
