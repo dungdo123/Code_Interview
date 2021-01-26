@@ -7,7 +7,7 @@ The objective of this project is to develop a Mask-RCNN detector for Food statem
 
 To overcome the limitations of small dataset, I applied two methods:
  - Data Augmentation using synthesis images
- The number of training images can be increased by combining fourth ground and difference backgrounds. The example is described below:
+ The number of training images can be increased by combining fourth ground and difference backgrounds. The training samples is described below:
  
 <img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/input/backgrounds/1.jpg" width="100" height="100"/> <img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/input/backgrounds/10.jpg" width="100" height="100"/>
  background
