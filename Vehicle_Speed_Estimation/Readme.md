@@ -16,13 +16,15 @@
    
       To my knowledge, there are two state-of-the-art methods to estimate the speed of the vehicle in traffic videos: camera calibration parameters and vehicle speed analysis. The former requires the calibration parameters of the camera which is usually not available for unknown source videos (ex. youtube video), and the latter requires training on a large dataset and some other complicate assumptions. To simplify the problem, I applied the following equation to estimate the speed of cars ( assume that the width of the detected car is 1 meter):
       
-               d_pixel*fs*3.6
-      speed = -----------------
-                    ppm
+               d_pixel x fs x 3.6
+      speed = -----------------------
+                      ppm
                     
                     
    Where: d_pixel: distance between two position of detected car.
+   
           fs: frame rate
+          
           ppm: pixel per meter
           
 # Tools:
