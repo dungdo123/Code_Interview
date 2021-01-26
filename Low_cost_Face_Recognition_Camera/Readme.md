@@ -8,7 +8,7 @@
   2. Face Recognition
    The Face recognition problem can be described as following:
    
-  <img src="https://github.com/dungdo123/Code_Interview/blob/main/Low_cost_Face_Recognition_Camera/flow.PNG" width="600" height="200"/> 
+  <img src="https://github.com/dungdo123/Code_Interview/blob/main/Low_cost_Face_Recognition_Camera/flow.PNG" width="800" height="100"/> 
  
    
   3. Temperature monitoring
