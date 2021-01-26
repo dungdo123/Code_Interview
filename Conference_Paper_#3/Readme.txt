@@ -10,5 +10,5 @@ This code is for data processing part in my paper "Accurate Food Quality Estimat
  - keras, pandas, matplotlib,etc.
  
 + Resutls:
-Check the attached paper for details.
+Check the attached paper and the notebook for details.
  
