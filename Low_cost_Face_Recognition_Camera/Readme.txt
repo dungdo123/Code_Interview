@@ -26,3 +26,4 @@ Thermal camera display:
 https://youtu.be/MBCObK8PoXc
 
 Face Recognition:
+https://youtu.be/3OVV7TnWiog
