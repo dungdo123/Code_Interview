@@ -2,4 +2,5 @@ This code is for Mask-RCNN part in my paper "A Deep Learning Approach for Food Q
 
 + Description
 ![image](https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/input/backgrounds/1.jpg)
+![](https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/input/backgrounds/1.jpg)
 + Tools:
