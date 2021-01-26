@@ -3,7 +3,7 @@ This code is for Mask-RCNN part in my paper "A Deep Learning Approach for Food Q
 # Description
 The objective of this project is to develop a Mask-RCNN detector for Food statements. Mask R-CNN is adopted to solve instance segmentation problems. The proposed architecture is shown below:
 
-<img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/architecture.PNG" width="200" height="600"/>
+<img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/architecture.PNG" width="600" height="200"/>
 
 To overcome the limitations of small dataset, I applied two methods:
  - Data Augmentation using synthesis images
