@@ -20,6 +20,7 @@
       speed = -----------------
                     ppm
                     
+                    
    Where: d_pixel: distance between two position of detected car.
           fs: frame rate
           ppm: pixel per meter
