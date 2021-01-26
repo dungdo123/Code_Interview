@@ -28,10 +28,11 @@ The pre-trained model can be found in the maskrcnn author's project: https://git
 
 # Results:
 
-<img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/inference_results1.PNG" width="100" height="100"/> <img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/inference_results2.PNG" width="100" height="100"/>
+<img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/inference_results1.PNG" width="600" height="200"/> 
+<img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/inference_results2.PNG" width="600" height="200"/>
 Inference examples.
 
 Check the notebook file for details of training flow.
 
 # Tools:
-- python, google colab, pycharm, opencv, tensorflow, maskrcnn, 
+- python, google colab, pycharm, opencv, tensorflow, maskrcnn, etc.
