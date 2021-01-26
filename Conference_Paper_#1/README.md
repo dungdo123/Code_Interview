@@ -11,12 +11,19 @@ To overcome the limitations of small dataset, I applied two methods:
  
 <img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/input/backgrounds/1.jpg" width="100" height="100"/> <img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/input/backgrounds/10.jpg" width="100" height="100"/>
  background
+ 
 <img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/input/foregrounds/pork/good/1.png" width="100" height="100"/> <img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/input/foregrounds/pork/good/2.png" width="100" height="100"/>
 fourthground
+
 <img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/output/train_examples/images/00000005.jpg" width="100" height="100"/> <img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/output/train_examples/images/00000006.jpg" width="100" height="100"/>
 Composed images
+
 <img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/output/train_examples/masks/00000005.png" width="100" height="100"/> <img src="https://github.com/dungdo123/Code_Interview/blob/main/Conference_Paper_%231/Data%20augmentation/dataset/output/train_examples/masks/00000006.png" width="100" height="100"/>
+Composed masks
+
  - Transfer learning
+The pre-trained model can be found in the maskrcnn author's project: https://github.com/matterport/Mask_RCNN
 
 
 # Tools:
+- python, google colab, pycharm, opencv, tensorflow, maskrcnn, 
