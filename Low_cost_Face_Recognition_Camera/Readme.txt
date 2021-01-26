@@ -6,16 +6,23 @@
    + Because of the limitations of Raspberry Pi, the haar_cascade was used for face region detection.
    + Some other face detector are also investigate including: mtcnn, SSD.
   2. Face Recognition
-   + 
+   The Face recognition problem can be described as following:
+   
+   |--------------------------------------------------------------- |      | -----------------------|     |--------------------|
+   |Dataset ---> Face_detector ---> OpenFace model---> 128-d vector |  =>  | SVM classifier training|  => |Run face recognition|
+   |----------------------------------------------------------------|      | -----------------------|     |--------------------|
+                  Extract_embedding.py                                         train_model.py           recognize.py/recognize_video.py
+   
+   
   3. Temperature monitoring
    + The AMG8833 grideyes was used as thermal sensor.
-   + The raw data read from sensor was converted to 8x8 thermal image.
-   + The highest value in the temperature array was chose as temperature of object
+   + Raw data read from sensor was converted to 8x8 thermal image and the highest value in the temperature array was chosen as temperature of object
    
 + Tool:
  - Raspberry pi3, AMG88xx
  - Raspbian (linux dis), python 3.
  - OpenCV, pygame, Adafruit_AMG88xx
+ - Pretrained model: SSD face detector, OpenFace, 
  
 + Results:
 
@@ -27,3 +34,6 @@ https://youtu.be/MBCObK8PoXc
 
 Face Recognition:
 https://youtu.be/3OVV7TnWiog
+
++ References:
+https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/
