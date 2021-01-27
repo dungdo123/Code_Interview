@@ -7,7 +7,7 @@ This code is for data processing part in my paper "Accurate Food Quality Estimat
  - Python
  - jupyter notebook
  - google colab
- - keras, pandas, matplotlib,etc.
+ - keras, pandas, matplotlib, tensorflow, etc.
  
 # Resutls:
 Check the attached paper and the notebook for details.
