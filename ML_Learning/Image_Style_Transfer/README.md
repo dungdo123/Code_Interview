@@ -7,11 +7,11 @@ Download Pre-trained VGG19 before testing;
 
 # Demo
 
-<img src="https://github.com/dungdo123/Code_Interview/blob/main/ML_Learning/Image_Style_Transfer/style.jpg" width="400" height="600"/>
+<img src="https://github.com/dungdo123/Code_Interview/blob/main/ML_Learning/Image_Style_Transfer/style.jpg" width="100" height="150"/>
 Style
 
-<img src="https://github.com/dungdo123/Code_Interview/blob/main/ML_Learning/Image_Style_Transfer/friends.jpg" width="400" height="600"/>
+<img src="https://github.com/dungdo123/Code_Interview/blob/main/ML_Learning/Image_Style_Transfer/friends.jpg" width="100" height="150"/>
 Target
 
-<img src="https://github.com/dungdo123/Code_Interview/blob/main/ML_Learning/Image_Style_Transfer/200_friends.jpg" width="400" height="600"/>
+<img src="https://github.com/dungdo123/Code_Interview/blob/main/ML_Learning/Image_Style_Transfer/200_friends.jpg" width="100" height="150"/>
 Transfer_image
