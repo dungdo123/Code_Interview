@@ -21,6 +21,10 @@ A client-server system is built to detect the HRT in realtime. The client (Raspb
 
 # Demo
 
+The demonstrations can be found below:
+
+demo1: https://youtu.be/1cN30QiZlqc
+demo2: https://youtu.be/cn6QpxoF8EI
 # Evaluation
 
 The inference hasn't achieved a good results yet, The reasons could be:
