@@ -1,0 +1,2 @@
+https://forum.arduino.cc/index.php?topic=373330.0
+https://www.hackster.io/the_marmik/dynamixel-ax12-and-the-raspberry-pi-6536e3
