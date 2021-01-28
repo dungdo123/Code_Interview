@@ -26,6 +26,7 @@ The demonstrations can be found below:
 demo1: https://youtu.be/1cN30QiZlqc
 
 demo2: https://youtu.be/cn6QpxoF8EI
+
 # Evaluation
 
 The inference hasn't achieved a good results yet, The reasons could be:
@@ -35,7 +36,7 @@ The inference hasn't achieved a good results yet, The reasons could be:
 - The model is not trained enough.
 - etc.
 
-To solve about problems, some extra-technique can be applied:
+To enhance the performance, some extra-techniques can be applied:
 
 - Detect the text region before inference ( using tesseract).
 - Config some parameters of model.
