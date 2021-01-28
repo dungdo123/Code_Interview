@@ -1,0 +1,506 @@
+#include <16F628.h>
+
+#use delay(crystal=12MHz)
+#define LED PIN_A0
+#define BUZZ PIN_A1
+#define DELAY 500
+//#use pwm(CCP2,FREQUENCY=1200,DUTY=90)
+
+//Define mode
+#define  COMMAND_MODE 0b10000000 /*!< This is used FOR sending standard commands. */
+#define  READ_MODE  0b11000000 /*!< This instructs the HT1621 to prepare FOR reading the internal RAM. */
+#define  WRITE_MODE  0b10100000 /*!< This instructs the HT1621 to prepare FOR writing the internal RAM. */
+#define  READ_MODIFY_WRITE_MODE  0b10100000 /*!< This instructs the HT1621 to prepare FOR reading/modifying batch of internal RAM adresses. */
+#define  SPECIAL_MODE  0b10010000 /*!< This instructs the HT1621 to prepare FOR executing a special command. */
+
+//Define command
+#define COMMAND_SYS_DIS    0b00000000 /*!< System disable. It stops the bias generator and the system oscillator. */
+#define COMMAND_SYS_EN     0b00000010 /*!< System enable. It starts the bias generator and the system oscillator. */
+#define COMMAND_LCD_OFF    0b00000100 /*!< Turn off the bias generator. */
+#define COMMAND_LCD_ON     0b00000110 /*!< Turn on the bias generator. */
+#define COMMAND_TIMER_DIS  0b00001000 /*!< Disable time base output. */
+#define COMMAND_WDT_DIS    0b00001010 /*!< Watch-dog timer disable. */
+#define COMMAND_TIMER_EN   0b00001100 /*!< Enable time base output. */
+#define COMMAND_WDT_EN     0b00001110 /*!< Watch-dog timer enable. The timer is reset. */
+#define COMMAND_CLR_TIMER  0b00011000 /*!< Clear the contents of the time base generator. */
+#define COMMAND_CLR_WDT    0b00011100 /*!< Clear the contents of the watch-dog stage. */
+#define COMMAND_TONE_OFF   0b00010000 /*!< Stop emitting the tone signal at the tone pin. \sa TONE2K, TONE4K */
+#define COMMAND_TONE_ON    0b00010010 /*!< Start emitting tone signal at the tone pin. Tone frequency is selected using commands TONE2K or TONE4K. \sa TONE2K, TONE4K */
+#define COMMAND_TONE2K     0b11000000 /*!< Output tone is at 2kHz. */
+#define COMMAND_TONE4K     0b10000000 /*!< Output tone is at 4kHz. */
+#define COMMAND_RC256K     0b00110000 /*!< System oscillator is the internal RC oscillator at 256kHz. */
+#define COMMAND_XTAL32K    0b00101000 /*!< System oscillator is the crystal oscillator at 32768Hz. */
+#define COMMAND_EXT256K    0b00111000 /*!< System oscillator is an external oscillator at 256kHz. */
+
+//Set bias to 1/2 or 1/3 cycle
+
+//Set to 2,3 or 4 connected COM lines
+#define COMMAND_BIAS_HALF_2_COM   0b01000000 /*!< Use 1/2 bias and 2 commons. */
+#define COMMAND_BIAS_HALF_3_COM   0b01001000 /*!< Use 1/2 bias and 3 commons. */
+#define COMMAND_BIAS_HALF_4_COM   0b01010000 /*!< Use 1/2 bias and 4 commons. */
+#define COMMAND_BIAS_THIRD_2_COM  0b01000010 /*!< Use 1/3 bias and 2 commons. */
+#define COMMAND_BIAS_THIRD_3_COM  0b01001010 /*!< Use 1/3 bias and 3 commons. */
+#define COMMAND_BIAS_THIRD_4_COM  0b01010010 /*!< Use 1/3 bias and 4 commons. */
+#define COMMAND_IRQ_EN     0b00010000 /*!< Enables IRQ output. This needs to be excuted in SPECIAL_MODE. */
+#define COMMAND_IRQ_DIS    0b00010000 /*!< Disables IRQ output. This needs to be excuted in SPECIAL_MODE. */
+
+// WDT configuration commands
+#define COMMAND_F1  0b01000000 /*!< Time base/WDT clock. Output = 1Hz. Time-out = 4s. This needs to be excuted in SPECIAL_MODE. */
+#define COMMAND_F2  0b01000010 /*!< Time base/WDT clock. Output = 2Hz. Time-out = 2s. This needs to be excuted in SPECIAL_MODE. */
+#define COMMAND_F4  0b01000100 /*!< Time base/WDT clock. Output = 4Hz. Time-out = 1s. This needs to be excuted in SPECIAL_MODE. */
+#define COMMAND_F8  0b01000110 /*!< Time base/WDT clock. Output = 8Hz. Time-out = .5s. This needs to be excuted in SPECIAL_MODE. */
+#define COMMAND_F16  0b01001000 /*!< Time base/WDT clock. Output = 16Hz. Time-out = .25s. This needs to be excuted in SPECIAL_MODE. */
+#define COMMAND_F32  0b01001010 /*!< Time base/WDT clock. Output = 32Hz. Time-out = .125s. This needs to be excuted in SPECIAL_MODE. */
+#define COMMAND_F64  0b01001100 /*!< Time base/WDT clock. Output = 64Hz. Time-out = .0625s. This needs to be excuted in SPECIAL_MODE. */
+#define COMMAND_F128  0b01001110 /*!< Time base/WDT clock. Output = 128Hz. Time-out = .03125s. This needs to be excuted in SPECIAL_MODE. */
+
+//Don't use
+#define COMMAND_TEST_ON    0b11000000 /*!< Don't use! Only FOR manifacturers. This needs SPECIAL_MODE. */
+#define COMMAND_TEST_OFF   0b11000110  /*!< Don't use! Only FOR manifacturers. This needs SPECIAL_MODE. */
+#define uchar   unsigned char
+#define uint   unsigned int16
+
+// //Define port    HT1621 data port
+#define CS   PIN_B5  //Pin 2 as chip selection output
+#define WR   PIN_B4  //Pin 3 as read clock  output
+#define DATA PIN_B3 //Pin 4 as Serial data output Khong dung duoc C4
+//
+// //Define port    HT1621 data port
+#define CS2   PIN_B2  //Pin 2 as chip selection output
+#define WR2   PIN_B1  //Pin 3 as read clock  output
+#define DATA2 PIN_B0 //Pin 4 as Serial data output Khong dung duoc C4
+
+#define CSH1    output_high(CS2)//digitalWrite(CS, HIGH)
+#define CSL1    output_low(CS2)//digitalWrite(CS, LOW)
+#define WRH1    output_high(WR2)//digitalWrite(WR, HIGH)
+#define WRL1    output_low(WR2)//digitalWrite(WR, LOW)
+#define DATAH1  output_high(DATA2)//digitalWrite(DATA, HIGH)
+#define DATAL1  output_low(DATA2)//digitalWrite(DATA, LOW)
+
+#define CSH2    output_high(CS)//digitalWrite(CS, HIGH)
+#define CSL2    output_low(CS)//digitalWrite(CS, LOW)
+#define WRH2    output_high(WR)//digitalWrite(WR, HIGH)
+#define WRL2    output_low(WR)//digitalWrite(WR, LOW)
+#define DATAH2  output_high(DATA)//digitalWrite(DATA, HIGH)
+#define DATAL2  output_low(DATA)//digitalWrite(DATA, LOW)
+
+char dispnum[3] = {0x00, 0x00, 0x00};
+const char num_small[] = {0b01011111, 0b00000110, 0b00111101, 0b00101111, 0b01100110, 0b01101011, 0b01111011, 0b00001110, 0b01111111, 0b01101111};//LCD loai nho
+const       char num[] = {0b01011111, 0b00000110, 0b01101011, 0b00101111, 0b00110110, 0b00111101, 0b01111101, 0b00000111, 0b01111111, 0b00111111};
+unsigned int16 time_left=0;
+
+
+/*Name: SendBit_1621_1(send data)
+---------------------------------------------------------------------------*/
+void SendBit_1621_1(uchar sdata, uchar cnt) //High bit first
+{
+   uchar i;
+   for (i = 0; i < cnt; i++)
+   {
+      WRL1;
+      delay_us(20);
+      if (sdata & 0x80) DATAH1;
+      else DATAL1;
+      delay_us(20);
+      WRH1;
+      delay_us(20);
+      sdata <<= 1;
+   }
+   delay_us(20);
+}
+
+/**-------------------------------------------------------------------------
+
+         Name: SendCmd(send cmd)
+         //Write MODE"100" AND 9 bits command
+---------------------------------------------------------------------------*/
+
+void SendCmd_1621_1(uchar command)
+{
+   CSL1;
+   SendBit_1621_1(0x80, 4);
+   SendBit_1621_1(command, 8);
+   CSH1;
+}
+/**-------------------------------------------------------------------------
+
+         Name: Write_1621send data and cmd)
+---------------------------------------------------------------------------*/
+
+void Write_1621_1(uchar addr, uchar sdata)
+{
+   addr <<= 3;
+   CSL1;
+   SendBit_1621_1(0xa0, 3);    //Write MODE"101"
+   SendBit_1621_1(addr, 6);    //Write addr high 6 bits
+   SendBit_1621_1(sdata, 8);   //Write data  8 bits
+   CSH1;
+}
+
+
+/**-------------------------------------------------------------------------
+
+            Name: all_off(Clear Display)
+---------------------------------------------------------------------------*/
+
+void HT1621_all_off_1(uchar num_small)
+{ uchar i;
+   uchar addr = 0;
+   for (i = 0; i < num_small; i++)
+   {
+      Write_1621_1(addr, 0x00);
+      addr += 1;
+   }
+}
+/****************************************************************************
+
+            Name: all_on(All lit)
+****************************************************************************/
+
+void HT1621_all_on_1(uchar num_small)
+{ 
+   uchar i, j;
+   uchar addr = 0;
+   for (i = 0; i < num_small; i++)
+   { Write_1621_1(addr, 0xff);
+      addr += 1;
+   }
+}      /****************************************************************************
+
+                  Name: all_on_num(All lit,Display the same number)
+****************************************************************************/
+
+void HT1621_all_on_num_1(uchar num_small, uchar xx)
+{ 
+   uchar i, j;
+   uchar addr = 0;
+   for (i = 0; i < num_small; i++)
+   { Write_1621_1(addr, xx);
+      addr += 1;
+   }
+}
+
+/****************************************************************************
+
+            Name: Init_1621_1(initialize 1621)
+*****************************************************************************/
+
+void Init_1621_1(void)
+{
+   SendCmd_1621_1(COMMAND_SYS_EN);
+   SendCmd_1621_1(COMMAND_RC256K);
+   SendCmd_1621_1(COMMAND_BIAS_HALF_4_COM);
+   SendCmd_1621_1(COMMAND_LCD_ON);
+}
+/****************************************************************************
+
+            Name: LCDoff_1(off 1621)
+*****************************************************************************/
+
+void LCDoff_1(void)
+{
+   SendCmd_1621_1(COMMAND_LCD_OFF);
+}
+/****************************************************************************
+
+            Name: LCDon_1(on 1621)
+*****************************************************************************/
+
+void LCDon_1(void)
+{
+   SendCmd_1621_1(COMMAND_LCD_ON);
+}
+
+
+void displayallnum_1(unsigned int n)       //Display all digital characters
+{ uchar i, j;
+   uchar addr = 0;
+
+   for (i = 0; i < n; i++)
+   { for (j = 0; j < 27; j++)
+      {
+         Write_1621_1(addr, num_small[j]); delay_ms(100) ;
+      }
+      addr += 1;
+   }
+
+}
+
+
+//By-bit display 8 characters and decimal point
+void displayall8_1(void)
+{ uchar i;
+   HT1621_all_off_1(16);
+   for (i = 0; i < 16; i++)
+   {
+      Write_1621_1(i, 0b11110111);
+      delay_ms(50) ;
+   }
+}
+
+//
+
+/****************************************************************************
+
+Name: displaydata_1(unsigned long int t) Display  data
+t : Data to be displayed
+
+*****************************************************************************/
+
+void displaydata_1(unsigned int16 t)
+{ 
+   dispnum[0] = num_small[(t / 100)%10];
+   dispnum[1] = num_small[(t / 10)%10];
+   dispnum[2] = num_small[(t%10)];
+   if(t>=100) Write_1621_1(0, dispnum[0]);
+   else Write_1621_1(0, 0);
+   if(t>=10)  Write_1621_1(1, dispnum[1]);
+   else Write_1621_1(1, 0);
+   if(t>=0)Write_1621_1(2, dispnum[2]);
+   
+   //!    uchar i;
+   //!  for (i = 0; i < 3 ; i++)
+   //!  {
+   //!    Write_1621_1(i, dispnum[i]);
+   //!  }
+}
+
+
+void stop_display_1()
+{
+ SendCmd_1621_1(COMMAND_LCD_OFF);
+ SendCmd_1621_1(COMMAND_SYS_DIS);
+}
+
+
+
+
+
+
+/*Name: SendBit_1621_2(send data)
+---------------------------------------------------------------------------*/
+void SendBit_1621_2(uchar sdata, uchar cnt) //High bit first
+{
+   uchar i;
+   for (i = 0; i < cnt; i++)
+   {
+      WRL2;
+      delay_us(20);
+      if (sdata & 0x80) DATAH2;
+      else DATAL2;
+      delay_us(20);
+      WRH2;
+      delay_us(20);
+      sdata <<= 1;
+   }
+   delay_us(20);
+}
+
+/**-------------------------------------------------------------------------
+
+         Name: SendCmd(send cmd)
+         //Write MODE"100" AND 9 bits command
+---------------------------------------------------------------------------*/
+
+void SendCmd_1621_2(uchar command)
+{
+   CSL2;
+   SendBit_1621_2(0x80, 4);
+   SendBit_1621_2(command, 8);
+   CSH2;
+}
+/**-------------------------------------------------------------------------
+
+         Name: Write_1621send data and cmd)
+---------------------------------------------------------------------------*/
+
+void Write_1621_2(uchar addr, uchar sdata)
+{
+   addr <<= 3;
+   CSL2;
+   SendBit_1621_2(0xa0, 3);    //Write MODE"101"
+   SendBit_1621_2(addr, 6);    //Write addr high 6 bits
+   SendBit_1621_2(sdata, 8);   //Write data  8 bits
+   CSH2;
+}
+
+
+/**-------------------------------------------------------------------------
+
+            Name: all_off(Clear Display)
+---------------------------------------------------------------------------*/
+
+void HT1621_all_off_2(uchar num)
+{ uchar i;
+   uchar addr = 0;
+   for (i = 0; i < num; i++)
+   {
+      Write_1621_2(addr, 0x00);
+      addr += 1;
+   }
+}
+/****************************************************************************
+
+            Name: all_on(All lit)
+****************************************************************************/
+
+void HT1621_all_on_2(uchar num)
+{ 
+   uchar i, j;
+   uchar addr = 0;
+   for (i = 0; i < num; i++)
+   { Write_1621_2(addr, 0xff);
+      addr += 1;
+   }
+}      /****************************************************************************
+
+                  Name: all_on_num(All lit,Display the same number)
+****************************************************************************/
+
+void HT1621_all_on_num_2(uchar num, uchar xx)
+{ 
+   uchar i, j;
+   uchar addr = 0;
+   for (i = 0; i < num; i++)
+   { Write_1621_2(addr, xx);
+      addr += 1;
+   }
+}
+
+/****************************************************************************
+
+            Name: Init_1621_2(initialize 1621)
+*****************************************************************************/
+
+void Init_1621_2(void)
+{
+   SendCmd_1621_2(COMMAND_SYS_EN);
+   SendCmd_1621_2(COMMAND_RC256K);
+   SendCmd_1621_2(COMMAND_BIAS_HALF_4_COM);
+   SendCmd_1621_2(COMMAND_LCD_ON);
+}
+/****************************************************************************
+
+            Name: LCDoff_2(off 1621)
+*****************************************************************************/
+
+void LCDoff_2(void)
+{
+   SendCmd_1621_2(COMMAND_LCD_OFF);
+}
+/****************************************************************************
+
+            Name: LCDon_2(on 1621)
+*****************************************************************************/
+
+void LCDon_2(void)
+{
+   SendCmd_1621_2(COMMAND_LCD_ON);
+}
+
+
+void displayallnum_2(unsigned int n)       //Display all digital characters
+{ uchar i, j;
+   uchar addr = 0;
+
+   for (i = 0; i < n; i++)
+   { for (j = 0; j < 27; j++)
+      {
+         Write_1621_2(addr, num[j]); delay_ms(100) ;
+      }
+      addr += 1;
+   }
+
+}
+
+
+//By-bit display 8 characters and decimal point
+void displayall8_2(void)
+{ uchar i;
+   HT1621_all_off_2(16);
+   for (i = 0; i < 16; i++)
+   {
+      Write_1621_2(i, 0b11110111);
+      delay_ms(50) ;
+   }
+}
+
+//
+
+/****************************************************************************
+
+Name: displaydata_1(unsigned long int t) Display  data
+t : Data to be displayed
+
+*****************************************************************************/
+
+void displaydata_2(unsigned int16 t)
+{ 
+   dispnum[0] = num[(t / 100)%10];
+   dispnum[1] = num[(t / 10)%10];
+   dispnum[2] = num[(t%10)];
+   if(t>=100) Write_1621_2(0, dispnum[0]);
+   else Write_1621_2(0, 0);
+   if(t>=10)  Write_1621_2(1, dispnum[1]);
+   else Write_1621_2(1, 0);
+   if(t>=0)Write_1621_2(2, dispnum[2]);
+   
+   //!    uchar i;
+   //!  for (i = 0; i < 3 ; i++)
+   //!  {
+   //!    Write_1621_2(i, dispnum[i]);
+   //!  }
+}
+
+
+void stop_display_2()
+{
+ SendCmd_1621_2(COMMAND_LCD_OFF);
+ SendCmd_1621_2(COMMAND_SYS_DIS);
+}
+void main()
+{       
+      Init_1621_2() ;
+      
+      HT1621_all_on_1(16) ;      delay_ms(300) ;
+      HT1621_all_off_1(16);      delay_ms(300) ;
+      HT1621_all_on_1(16) ;      delay_ms(300) ;
+      HT1621_all_off_1(16);      delay_ms(300) ;      
+      
+      HT1621_all_on_2(16) ;      delay_ms(300) ;
+      HT1621_all_off_2(16);      delay_ms(300) ;
+      HT1621_all_on_2(16) ;      delay_ms(300) ;
+      HT1621_all_off_2(16);      delay_ms(300) ;
+      
+      enable_interrupts(INT_TIMER1);
+      enable_interrupts(GLOBAL);
+      time_left=10;
+      
+   While(true)
+   {
+      if(time_left<=1) time_left=999;
+     while(time_left>0)
+     {   
+         
+       //  displaydata_1(time_left);
+         displaydata_2(time_left);
+         
+         time_left--;
+         if(time_left>1)
+         {
+         delay_ms(1000);
+         }
+         else{
+         output_low(LED);//Bat LEd
+      
+         output_high(LED);//Tat LEd
+         delay_ms(400);
+         //
+           output_low(LED);//Bat LEd
+    
+         output_high(LED);//Tat LEd
+         delay_ms(400);
+         }
+     }
+   }
+}

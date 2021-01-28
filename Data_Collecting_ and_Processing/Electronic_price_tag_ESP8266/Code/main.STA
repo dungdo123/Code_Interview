@@ -1,0 +1,62 @@
+
+ROM used:   752/2048 (37%)
+            752/2048 (37%) including unused fragments
+
+            0.7 Average locations per line
+            4.6 Average locations per statement
+
+RAM used:   11/224 (5%) at main() level
+            19/224 (8%) worst case
+
+Stack used: 3 worst case (3 in main + 0 for interrupts)
+Stack size: 8
+
+Lines Stmts  %   Files
+----- ----- ---  -----
+  499   164 100  main.c
+  512     0   0  ..\..\..\..\..\..\Program Files (x86)\PICC\Devices\16F628.h
+----- -----
+ 1011   164 Total
+
+Page ROM  %  RAM    Vol Diff  Functions:
+---- --- --- ---    --- ----  ----------
+0     21   3    1             @delay_ms1
+0     14   2    0             @const548
+0     14   2    0    371  6.4  @const551
+0     49   7    3    371  6.4  SendBit_1621_1
+0     19   3    1    106  1.7  SendCmd_1621_1
+0     29   4    2    183  2.5  Write_1621_1
+0     15   2    3    181  5.0  HT1621_all_off_1
+0     16   2    4    192  5.0  HT1621_all_on_1
+0     13   2    0     72  1.2  Init_1621_1
+0    113  15    4    554  5.3  displaydata_1
+0     37   5    5     32  1.0  @DIV1616
+0     49   7    3    371  6.4  SendBit_1621_2
+0     19   3    1    106  1.7  SendCmd_1621_2
+0     29   4    2    183  2.5  Write_1621_2
+0     15   2    3    181  5.0  HT1621_all_off_2
+0     16   2    4    192  5.0  HT1621_all_on_2
+0     13   2    0     72  1.2  Init_1621_2
+0    113  15    4    554  5.3  displaydata_2
+0    154  20    1    782  4.3  MAIN
+ Inline         0             @cinit1
+
+Program metrics:
+    Functions               17
+    Statements              164
+    Comments                215
+    Volume (V)              7785
+    Difficulty (D)          64.2
+    Effort to implement (E) 500095
+    Time to implement (T)   7 hours, 43 minutes
+    Est Delivered Bugs (B)  2
+    Cyclomatic Complexity   18
+    Maintainability (MI)    67
+
+ Segment     Used  Free
+-----------  ----  ----
+00000-00003     4  0  
+00004-007FF   748  1296  
+
+
+

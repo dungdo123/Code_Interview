@@ -1,0 +1,1295 @@
+CCS PCM C Compiler, Version 5.025, 7467               11-Nov-16 10:55
+
+               Filename:   C:\Users\Vu Quan\Desktop\File Mach\PIC+LCD_NEW\Code\main.lst
+
+               ROM used:   752 words (37%)
+                           Largest free fragment is 1296
+               RAM used:   11 (5%) at main() level
+                           19 (8%) worst case
+               Stack used: 3 locations
+               Stack size: 8
+
+*
+0000:  MOVLW  02
+0001:  MOVWF  0A
+0002:  GOTO   256
+0003:  NOP
+.................... #include <16F628.h> 
+.................... //////////// Standard Header file for the PIC16F628 device //////////////// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... ////        (C) Copyright 1996, 2013 Custom Computer Services          //// 
+.................... //// This source code may only be used by licensed users of the CCS C  //// 
+.................... //// compiler.  This source code may only be distributed to other      //// 
+.................... //// licensed users of the CCS C compiler.  No other use, reproduction //// 
+.................... //// or distribution is permitted without written permission.          //// 
+.................... //// Derivative programs created using this software in object code    //// 
+.................... //// form are not restricted in any way.                               //// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... #device PIC16F628 
+0004:  BCF    0A.0
+0005:  BCF    0A.1
+0006:  BCF    0A.2
+0007:  ADDWF  02,F
+0008:  RETLW  5F
+0009:  RETLW  06
+000A:  RETLW  3D
+000B:  RETLW  2F
+000C:  RETLW  66
+000D:  RETLW  6B
+000E:  RETLW  7B
+000F:  RETLW  0E
+0010:  RETLW  7F
+0011:  RETLW  6F
+0012:  BCF    0A.0
+0013:  BCF    0A.1
+0014:  BCF    0A.2
+0015:  ADDWF  02,F
+0016:  RETLW  5F
+0017:  RETLW  06
+0018:  RETLW  6B
+0019:  RETLW  2F
+001A:  RETLW  36
+001B:  RETLW  3D
+001C:  RETLW  7D
+001D:  RETLW  07
+001E:  RETLW  7F
+001F:  RETLW  3F
+*
+014F:  CLRF   78
+0150:  CLRF   79
+0151:  CLRF   77
+0152:  CLRF   7A
+0153:  MOVF   2C,W
+0154:  BTFSS  03.2
+0155:  GOTO   159
+0156:  MOVF   2B,W
+0157:  BTFSC  03.2
+0158:  GOTO   173
+0159:  MOVLW  10
+015A:  MOVWF  2D
+015B:  BCF    03.0
+015C:  RLF    29,F
+015D:  RLF    2A,F
+015E:  RLF    77,F
+015F:  RLF    7A,F
+0160:  MOVF   2C,W
+0161:  SUBWF  7A,W
+0162:  BTFSS  03.2
+0163:  GOTO   166
+0164:  MOVF   2B,W
+0165:  SUBWF  77,W
+0166:  BTFSS  03.0
+0167:  GOTO   16F
+0168:  MOVF   2B,W
+0169:  SUBWF  77,F
+016A:  BTFSS  03.0
+016B:  DECF   7A,F
+016C:  MOVF   2C,W
+016D:  SUBWF  7A,F
+016E:  BSF    03.0
+016F:  RLF    78,F
+0170:  RLF    79,F
+0171:  DECFSZ 2D,F
+0172:  GOTO   15B
+0173:  RETURN
+....................  
+.................... #list 
+....................  
+....................  
+.................... #use delay(crystal=12MHz) 
+*
+00EF:  MOVLW  26
+00F0:  MOVWF  04
+00F1:  BCF    03.7
+00F2:  MOVF   00,W
+00F3:  BTFSC  03.2
+00F4:  GOTO   103
+00F5:  MOVLW  03
+00F6:  MOVWF  78
+00F7:  CLRF   77
+00F8:  DECFSZ 77,F
+00F9:  GOTO   0F8
+00FA:  DECFSZ 78,F
+00FB:  GOTO   0F7
+00FC:  MOVLW  E3
+00FD:  MOVWF  77
+00FE:  DECFSZ 77,F
+00FF:  GOTO   0FE
+0100:  NOP
+0101:  DECFSZ 00,F
+0102:  GOTO   0F5
+0103:  RETURN
+.................... #define LED PIN_A0 
+.................... #define BUZZ PIN_A1 
+.................... #define DELAY 500 
+.................... //#use pwm(CCP2,FREQUENCY=1200,DUTY=90) 
+....................  
+.................... //Define mode 
+.................... #define  COMMAND_MODE 0b10000000 /*!< This is used FOR sending standard commands. */ 
+.................... #define  READ_MODE  0b11000000 /*!< This instructs the HT1621 to prepare FOR reading the internal RAM. */ 
+.................... #define  WRITE_MODE  0b10100000 /*!< This instructs the HT1621 to prepare FOR writing the internal RAM. */ 
+.................... #define  READ_MODIFY_WRITE_MODE  0b10100000 /*!< This instructs the HT1621 to prepare FOR reading/modifying batch of internal RAM adresses. */ 
+.................... #define  SPECIAL_MODE  0b10010000 /*!< This instructs the HT1621 to prepare FOR executing a special command. */ 
+....................  
+.................... //Define command 
+.................... #define COMMAND_SYS_DIS    0b00000000 /*!< System disable. It stops the bias generator and the system oscillator. */ 
+.................... #define COMMAND_SYS_EN     0b00000010 /*!< System enable. It starts the bias generator and the system oscillator. */ 
+.................... #define COMMAND_LCD_OFF    0b00000100 /*!< Turn off the bias generator. */ 
+.................... #define COMMAND_LCD_ON     0b00000110 /*!< Turn on the bias generator. */ 
+.................... #define COMMAND_TIMER_DIS  0b00001000 /*!< Disable time base output. */ 
+.................... #define COMMAND_WDT_DIS    0b00001010 /*!< Watch-dog timer disable. */ 
+.................... #define COMMAND_TIMER_EN   0b00001100 /*!< Enable time base output. */ 
+.................... #define COMMAND_WDT_EN     0b00001110 /*!< Watch-dog timer enable. The timer is reset. */ 
+.................... #define COMMAND_CLR_TIMER  0b00011000 /*!< Clear the contents of the time base generator. */ 
+.................... #define COMMAND_CLR_WDT    0b00011100 /*!< Clear the contents of the watch-dog stage. */ 
+.................... #define COMMAND_TONE_OFF   0b00010000 /*!< Stop emitting the tone signal at the tone pin. \sa TONE2K, TONE4K */ 
+.................... #define COMMAND_TONE_ON    0b00010010 /*!< Start emitting tone signal at the tone pin. Tone frequency is selected using commands TONE2K or TONE4K. \sa TONE2K, TONE4K */ 
+.................... #define COMMAND_TONE2K     0b11000000 /*!< Output tone is at 2kHz. */ 
+.................... #define COMMAND_TONE4K     0b10000000 /*!< Output tone is at 4kHz. */ 
+.................... #define COMMAND_RC256K     0b00110000 /*!< System oscillator is the internal RC oscillator at 256kHz. */ 
+.................... #define COMMAND_XTAL32K    0b00101000 /*!< System oscillator is the crystal oscillator at 32768Hz. */ 
+.................... #define COMMAND_EXT256K    0b00111000 /*!< System oscillator is an external oscillator at 256kHz. */ 
+....................  
+.................... //Set bias to 1/2 or 1/3 cycle 
+....................  
+.................... //Set to 2,3 or 4 connected COM lines 
+.................... #define COMMAND_BIAS_HALF_2_COM   0b01000000 /*!< Use 1/2 bias and 2 commons. */ 
+.................... #define COMMAND_BIAS_HALF_3_COM   0b01001000 /*!< Use 1/2 bias and 3 commons. */ 
+.................... #define COMMAND_BIAS_HALF_4_COM   0b01010000 /*!< Use 1/2 bias and 4 commons. */ 
+.................... #define COMMAND_BIAS_THIRD_2_COM  0b01000010 /*!< Use 1/3 bias and 2 commons. */ 
+.................... #define COMMAND_BIAS_THIRD_3_COM  0b01001010 /*!< Use 1/3 bias and 3 commons. */ 
+.................... #define COMMAND_BIAS_THIRD_4_COM  0b01010010 /*!< Use 1/3 bias and 4 commons. */ 
+.................... #define COMMAND_IRQ_EN     0b00010000 /*!< Enables IRQ output. This needs to be excuted in SPECIAL_MODE. */ 
+.................... #define COMMAND_IRQ_DIS    0b00010000 /*!< Disables IRQ output. This needs to be excuted in SPECIAL_MODE. */ 
+....................  
+.................... // WDT configuration commands 
+.................... #define COMMAND_F1  0b01000000 /*!< Time base/WDT clock. Output = 1Hz. Time-out = 4s. This needs to be excuted in SPECIAL_MODE. */ 
+.................... #define COMMAND_F2  0b01000010 /*!< Time base/WDT clock. Output = 2Hz. Time-out = 2s. This needs to be excuted in SPECIAL_MODE. */ 
+.................... #define COMMAND_F4  0b01000100 /*!< Time base/WDT clock. Output = 4Hz. Time-out = 1s. This needs to be excuted in SPECIAL_MODE. */ 
+.................... #define COMMAND_F8  0b01000110 /*!< Time base/WDT clock. Output = 8Hz. Time-out = .5s. This needs to be excuted in SPECIAL_MODE. */ 
+.................... #define COMMAND_F16  0b01001000 /*!< Time base/WDT clock. Output = 16Hz. Time-out = .25s. This needs to be excuted in SPECIAL_MODE. */ 
+.................... #define COMMAND_F32  0b01001010 /*!< Time base/WDT clock. Output = 32Hz. Time-out = .125s. This needs to be excuted in SPECIAL_MODE. */ 
+.................... #define COMMAND_F64  0b01001100 /*!< Time base/WDT clock. Output = 64Hz. Time-out = .0625s. This needs to be excuted in SPECIAL_MODE. */ 
+.................... #define COMMAND_F128  0b01001110 /*!< Time base/WDT clock. Output = 128Hz. Time-out = .03125s. This needs to be excuted in SPECIAL_MODE. */ 
+....................  
+.................... //Don't use 
+.................... #define COMMAND_TEST_ON    0b11000000 /*!< Don't use! Only FOR manifacturers. This needs SPECIAL_MODE. */ 
+.................... #define COMMAND_TEST_OFF   0b11000110  /*!< Don't use! Only FOR manifacturers. This needs SPECIAL_MODE. */ 
+.................... #define uchar   unsigned char 
+.................... #define uint   unsigned int16 
+....................  
+.................... // //Define port    HT1621 data port 
+.................... #define CS   PIN_B5  //Pin 2 as chip selection output 
+.................... #define WR   PIN_B4  //Pin 3 as read clock  output 
+.................... #define DATA PIN_B3 //Pin 4 as Serial data output Khong dung duoc C4 
+.................... // 
+.................... // //Define port    HT1621 data port 
+.................... #define CS2   PIN_B2  //Pin 2 as chip selection output 
+.................... #define WR2   PIN_B1  //Pin 3 as read clock  output 
+.................... #define DATA2 PIN_B0 //Pin 4 as Serial data output Khong dung duoc C4 
+....................  
+.................... #define CSH1    output_high(CS2)//digitalWrite(CS, HIGH) 
+.................... #define CSL1    output_low(CS2)//digitalWrite(CS, LOW) 
+.................... #define WRH1    output_high(WR2)//digitalWrite(WR, HIGH) 
+.................... #define WRL1    output_low(WR2)//digitalWrite(WR, LOW) 
+.................... #define DATAH1  output_high(DATA2)//digitalWrite(DATA, HIGH) 
+.................... #define DATAL1  output_low(DATA2)//digitalWrite(DATA, LOW) 
+....................  
+.................... #define CSH2    output_high(CS)//digitalWrite(CS, HIGH) 
+.................... #define CSL2    output_low(CS)//digitalWrite(CS, LOW) 
+.................... #define WRH2    output_high(WR)//digitalWrite(WR, HIGH) 
+.................... #define WRL2    output_low(WR)//digitalWrite(WR, LOW) 
+.................... #define DATAH2  output_high(DATA)//digitalWrite(DATA, HIGH) 
+.................... #define DATAL2  output_low(DATA)//digitalWrite(DATA, LOW) 
+....................  
+.................... char dispnum[3] = {0x00, 0x00, 0x00}; 
+*
+025E:  CLRF   20
+025F:  CLRF   21
+0260:  CLRF   22
+.................... const char num_small[] = {0b01011111, 0b00000110, 0b00111101, 0b00101111, 0b01100110, 0b01101011, 0b01111011, 0b00001110, 0b01111111, 0b01101111};//LCD loai nho 
+.................... const       char num[] = {0b01011111, 0b00000110, 0b01101011, 0b00101111, 0b00110110, 0b00111101, 0b01111101, 0b00000111, 0b01111111, 0b00111111}; 
+.................... unsigned int16 time_left=0; 
+....................  
+....................  
+.................... /*Name: SendBit_1621_1(send data) 
+.................... ---------------------------------------------------------------------------*/ 
+.................... void SendBit_1621_1(uchar sdata, uchar cnt) //High bit first 
+.................... { 
+....................    uchar i; 
+....................    for (i = 0; i < cnt; i++) 
+*
+0020:  CLRF   2D
+0021:  MOVF   2C,W
+0022:  SUBWF  2D,W
+0023:  BTFSC  03.0
+0024:  GOTO   04B
+....................    { 
+....................       WRL1; 
+0025:  BSF    03.5
+0026:  BCF    06.1
+0027:  BCF    03.5
+0028:  BCF    06.1
+....................       delay_us(20); 
+0029:  MOVLW  13
+002A:  MOVWF  77
+002B:  DECFSZ 77,F
+002C:  GOTO   02B
+002D:  GOTO   02E
+....................       if (sdata & 0x80) DATAH1; 
+002E:  BTFSS  2B.7
+002F:  GOTO   035
+0030:  BSF    03.5
+0031:  BCF    06.0
+0032:  BCF    03.5
+0033:  BSF    06.0
+0034:  GOTO   039
+....................       else DATAL1; 
+0035:  BSF    03.5
+0036:  BCF    06.0
+0037:  BCF    03.5
+0038:  BCF    06.0
+....................       delay_us(20); 
+0039:  MOVLW  13
+003A:  MOVWF  77
+003B:  DECFSZ 77,F
+003C:  GOTO   03B
+003D:  GOTO   03E
+....................       WRH1; 
+003E:  BSF    03.5
+003F:  BCF    06.1
+0040:  BCF    03.5
+0041:  BSF    06.1
+....................       delay_us(20); 
+0042:  MOVLW  13
+0043:  MOVWF  77
+0044:  DECFSZ 77,F
+0045:  GOTO   044
+0046:  GOTO   047
+....................       sdata <<= 1; 
+0047:  BCF    03.0
+0048:  RLF    2B,F
+0049:  INCF   2D,F
+004A:  GOTO   021
+....................    } 
+....................    delay_us(20); 
+004B:  MOVLW  13
+004C:  MOVWF  77
+004D:  DECFSZ 77,F
+004E:  GOTO   04D
+004F:  GOTO   050
+0050:  RETURN
+.................... } 
+....................  
+.................... /**------------------------------------------------------------------------- 
+....................  
+....................          Name: SendCmd(send cmd) 
+....................          //Write MODE"100" AND 9 bits command 
+.................... ---------------------------------------------------------------------------*/ 
+....................  
+.................... void SendCmd_1621_1(uchar command) 
+.................... { 
+....................    CSL1; 
+0051:  BSF    03.5
+0052:  BCF    06.2
+0053:  BCF    03.5
+0054:  BCF    06.2
+....................    SendBit_1621_1(0x80, 4); 
+0055:  MOVLW  80
+0056:  MOVWF  2B
+0057:  MOVLW  04
+0058:  MOVWF  2C
+0059:  CALL   020
+....................    SendBit_1621_1(command, 8); 
+005A:  MOVF   25,W
+005B:  MOVWF  2B
+005C:  MOVLW  08
+005D:  MOVWF  2C
+005E:  CALL   020
+....................    CSH1; 
+005F:  BSF    03.5
+0060:  BCF    06.2
+0061:  BCF    03.5
+0062:  BSF    06.2
+0063:  RETURN
+.................... } 
+.................... /**------------------------------------------------------------------------- 
+....................  
+....................          Name: Write_1621send data and cmd) 
+.................... ---------------------------------------------------------------------------*/ 
+....................  
+.................... void Write_1621_1(uchar addr, uchar sdata) 
+.................... { 
+....................    addr <<= 3; 
+*
+00C2:  RLF    29,F
+00C3:  RLF    29,F
+00C4:  RLF    29,F
+00C5:  MOVLW  F8
+00C6:  ANDWF  29,F
+....................    CSL1; 
+00C7:  BSF    03.5
+00C8:  BCF    06.2
+00C9:  BCF    03.5
+00CA:  BCF    06.2
+....................    SendBit_1621_1(0xa0, 3);    //Write MODE"101" 
+00CB:  MOVLW  A0
+00CC:  MOVWF  2B
+00CD:  MOVLW  03
+00CE:  MOVWF  2C
+00CF:  CALL   020
+....................    SendBit_1621_1(addr, 6);    //Write addr high 6 bits 
+00D0:  MOVF   29,W
+00D1:  MOVWF  2B
+00D2:  MOVLW  06
+00D3:  MOVWF  2C
+00D4:  CALL   020
+....................    SendBit_1621_1(sdata, 8);   //Write data  8 bits 
+00D5:  MOVF   2A,W
+00D6:  MOVWF  2B
+00D7:  MOVLW  08
+00D8:  MOVWF  2C
+00D9:  CALL   020
+....................    CSH1; 
+00DA:  BSF    03.5
+00DB:  BCF    06.2
+00DC:  BCF    03.5
+00DD:  BSF    06.2
+00DE:  RETURN
+.................... } 
+....................  
+....................  
+.................... /**------------------------------------------------------------------------- 
+....................  
+....................             Name: all_off(Clear Display) 
+.................... ---------------------------------------------------------------------------*/ 
+....................  
+.................... void HT1621_all_off_1(uchar num_small) 
+*
+0104:  CLRF   27
+.................... { uchar i; 
+....................    uchar addr = 0; 
+....................    for (i = 0; i < num_small; i++) 
+0105:  CLRF   26
+0106:  MOVF   25,W
+0107:  SUBWF  26,W
+0108:  BTFSC  03.0
+0109:  GOTO   112
+....................    { 
+....................       Write_1621_1(addr, 0x00); 
+010A:  MOVF   27,W
+010B:  MOVWF  29
+010C:  CLRF   2A
+010D:  CALL   0C2
+....................       addr += 1; 
+010E:  MOVLW  01
+010F:  ADDWF  27,F
+0110:  INCF   26,F
+0111:  GOTO   106
+....................    } 
+0112:  RETURN
+.................... } 
+.................... /**************************************************************************** 
+....................  
+....................             Name: all_on(All lit) 
+.................... ****************************************************************************/ 
+....................  
+.................... void HT1621_all_on_1(uchar num_small) 
+*
+00DF:  CLRF   28
+.................... {  
+....................    uchar i, j; 
+....................    uchar addr = 0; 
+....................    for (i = 0; i < num_small; i++) 
+00E0:  CLRF   26
+00E1:  MOVF   25,W
+00E2:  SUBWF  26,W
+00E3:  BTFSC  03.0
+00E4:  GOTO   0EE
+....................    { Write_1621_1(addr, 0xff); 
+00E5:  MOVF   28,W
+00E6:  MOVWF  29
+00E7:  MOVLW  FF
+00E8:  MOVWF  2A
+00E9:  CALL   0C2
+....................       addr += 1; 
+00EA:  MOVLW  01
+00EB:  ADDWF  28,F
+00EC:  INCF   26,F
+00ED:  GOTO   0E1
+....................    } 
+00EE:  RETURN
+.................... }      /**************************************************************************** 
+....................  
+....................                   Name: all_on_num(All lit,Display the same number) 
+.................... ****************************************************************************/ 
+....................  
+.................... void HT1621_all_on_num_1(uchar num_small, uchar xx) 
+.................... {  
+....................    uchar i, j; 
+....................    uchar addr = 0; 
+....................    for (i = 0; i < num_small; i++) 
+....................    { Write_1621_1(addr, xx); 
+....................       addr += 1; 
+....................    } 
+.................... } 
+....................  
+.................... /**************************************************************************** 
+....................  
+....................             Name: Init_1621_1(initialize 1621) 
+.................... *****************************************************************************/ 
+....................  
+.................... void Init_1621_1(void) 
+.................... { 
+....................    SendCmd_1621_1(COMMAND_SYS_EN); 
+*
+0064:  MOVLW  02
+0065:  MOVWF  25
+0066:  CALL   051
+....................    SendCmd_1621_1(COMMAND_RC256K); 
+0067:  MOVLW  30
+0068:  MOVWF  25
+0069:  CALL   051
+....................    SendCmd_1621_1(COMMAND_BIAS_HALF_4_COM); 
+006A:  MOVLW  50
+006B:  MOVWF  25
+006C:  CALL   051
+....................    SendCmd_1621_1(COMMAND_LCD_ON); 
+006D:  MOVLW  06
+006E:  MOVWF  25
+006F:  CALL   051
+0070:  GOTO   262 (RETURN)
+.................... } 
+.................... /**************************************************************************** 
+....................  
+....................             Name: LCDoff_1(off 1621) 
+.................... *****************************************************************************/ 
+....................  
+.................... void LCDoff_1(void) 
+.................... { 
+....................    SendCmd_1621_1(COMMAND_LCD_OFF); 
+.................... } 
+.................... /**************************************************************************** 
+....................  
+....................             Name: LCDon_1(on 1621) 
+.................... *****************************************************************************/ 
+....................  
+.................... void LCDon_1(void) 
+.................... { 
+....................    SendCmd_1621_1(COMMAND_LCD_ON); 
+.................... } 
+....................  
+....................  
+.................... void displayallnum_1(unsigned int n)       //Display all digital characters 
+.................... { uchar i, j; 
+....................    uchar addr = 0; 
+....................  
+....................    for (i = 0; i < n; i++) 
+....................    { for (j = 0; j < 27; j++) 
+....................       { 
+....................          Write_1621_1(addr, num_small[j]); delay_ms(100) ; 
+....................       } 
+....................       addr += 1; 
+....................    } 
+....................  
+.................... } 
+....................  
+....................  
+.................... //By-bit display 8 characters and decimal point 
+.................... void displayall8_1(void) 
+.................... { uchar i; 
+....................    HT1621_all_off_1(16); 
+....................    for (i = 0; i < 16; i++) 
+....................    { 
+....................       Write_1621_1(i, 0b11110111); 
+....................       delay_ms(50) ; 
+....................    } 
+.................... } 
+....................  
+.................... // 
+....................  
+.................... /**************************************************************************** 
+....................  
+.................... Name: displaydata_1(unsigned long int t) Display  data 
+.................... t : Data to be displayed 
+....................  
+.................... *****************************************************************************/ 
+....................  
+.................... void displaydata_1(unsigned int16 t) 
+.................... {  
+....................    dispnum[0] = num_small[(t / 100)%10]; 
+*
+0174:  MOVF   26,W
+0175:  MOVWF  2A
+0176:  MOVF   25,W
+0177:  MOVWF  29
+0178:  CLRF   2C
+0179:  MOVLW  64
+017A:  MOVWF  2B
+017B:  CALL   14F
+017C:  MOVF   79,W
+017D:  MOVWF  28
+017E:  MOVF   78,W
+017F:  MOVWF  27
+0180:  MOVF   79,W
+0181:  MOVWF  2A
+0182:  MOVF   78,W
+0183:  MOVWF  29
+0184:  CLRF   2C
+0185:  MOVLW  0A
+0186:  MOVWF  2B
+0187:  CALL   14F
+0188:  MOVF   77,W
+0189:  MOVWF  27
+018A:  MOVF   7A,W
+018B:  MOVWF  28
+018C:  MOVWF  7A
+018D:  MOVF   77,W
+018E:  CALL   004
+018F:  MOVWF  78
+0190:  MOVWF  20
+....................    dispnum[1] = num_small[(t / 10)%10]; 
+0191:  MOVF   26,W
+0192:  MOVWF  2A
+0193:  MOVF   25,W
+0194:  MOVWF  29
+0195:  CLRF   2C
+0196:  MOVLW  0A
+0197:  MOVWF  2B
+0198:  CALL   14F
+0199:  MOVF   79,W
+019A:  MOVWF  28
+019B:  MOVF   78,W
+019C:  MOVWF  27
+019D:  MOVF   79,W
+019E:  MOVWF  2A
+019F:  MOVF   78,W
+01A0:  MOVWF  29
+01A1:  CLRF   2C
+01A2:  MOVLW  0A
+01A3:  MOVWF  2B
+01A4:  CALL   14F
+01A5:  MOVF   77,W
+01A6:  MOVWF  27
+01A7:  MOVF   7A,W
+01A8:  MOVWF  28
+01A9:  MOVWF  7A
+01AA:  MOVF   77,W
+01AB:  CALL   004
+01AC:  MOVWF  78
+01AD:  MOVWF  21
+....................    dispnum[2] = num_small[(t%10)]; 
+01AE:  MOVF   26,W
+01AF:  MOVWF  2A
+01B0:  MOVF   25,W
+01B1:  MOVWF  29
+01B2:  CLRF   2C
+01B3:  MOVLW  0A
+01B4:  MOVWF  2B
+01B5:  CALL   14F
+01B6:  MOVF   77,W
+01B7:  MOVWF  27
+01B8:  MOVF   7A,W
+01B9:  MOVWF  28
+01BA:  MOVWF  7A
+01BB:  MOVF   77,W
+01BC:  CALL   004
+01BD:  MOVWF  78
+01BE:  MOVWF  22
+....................    if(t>=100) Write_1621_1(0, dispnum[0]); 
+01BF:  MOVF   26,F
+01C0:  BTFSS  03.2
+01C1:  GOTO   1C6
+01C2:  MOVF   25,W
+01C3:  SUBLW  63
+01C4:  BTFSC  03.0
+01C5:  GOTO   1CB
+01C6:  CLRF   29
+01C7:  MOVF   20,W
+01C8:  MOVWF  2A
+01C9:  CALL   0C2
+01CA:  GOTO   1CE
+....................    else Write_1621_1(0, 0); 
+01CB:  CLRF   29
+01CC:  CLRF   2A
+01CD:  CALL   0C2
+....................    if(t>=10)  Write_1621_1(1, dispnum[1]); 
+01CE:  MOVF   26,F
+01CF:  BTFSS  03.2
+01D0:  GOTO   1D5
+01D1:  MOVF   25,W
+01D2:  SUBLW  09
+01D3:  BTFSC  03.0
+01D4:  GOTO   1DB
+01D5:  MOVLW  01
+01D6:  MOVWF  29
+01D7:  MOVF   21,W
+01D8:  MOVWF  2A
+01D9:  CALL   0C2
+01DA:  GOTO   1DF
+....................    else Write_1621_1(1, 0); 
+01DB:  MOVLW  01
+01DC:  MOVWF  29
+01DD:  CLRF   2A
+01DE:  CALL   0C2
+....................    if(t>=0)Write_1621_1(2, dispnum[2]); 
+01DF:  MOVLW  02
+01E0:  MOVWF  29
+01E1:  MOVF   22,W
+01E2:  MOVWF  2A
+01E3:  CALL   0C2
+01E4:  GOTO   2D1 (RETURN)
+....................     
+....................    //!    uchar i; 
+....................    //!  for (i = 0; i < 3 ; i++) 
+....................    //!  { 
+....................    //!    Write_1621_1(i, dispnum[i]); 
+....................    //!  } 
+.................... } 
+....................  
+....................  
+.................... void stop_display_1() 
+.................... { 
+....................  SendCmd_1621_1(COMMAND_LCD_OFF); 
+....................  SendCmd_1621_1(COMMAND_SYS_DIS); 
+.................... } 
+....................  
+....................  
+....................  
+....................  
+....................  
+....................  
+.................... /*Name: SendBit_1621_2(send data) 
+.................... ---------------------------------------------------------------------------*/ 
+.................... void SendBit_1621_2(uchar sdata, uchar cnt) //High bit first 
+.................... { 
+....................    uchar i; 
+....................    for (i = 0; i < cnt; i++) 
+*
+0071:  CLRF   2D
+0072:  MOVF   2C,W
+0073:  SUBWF  2D,W
+0074:  BTFSC  03.0
+0075:  GOTO   09C
+....................    { 
+....................       WRL2; 
+0076:  BSF    03.5
+0077:  BCF    06.4
+0078:  BCF    03.5
+0079:  BCF    06.4
+....................       delay_us(20); 
+007A:  MOVLW  13
+007B:  MOVWF  77
+007C:  DECFSZ 77,F
+007D:  GOTO   07C
+007E:  GOTO   07F
+....................       if (sdata & 0x80) DATAH2; 
+007F:  BTFSS  2B.7
+0080:  GOTO   086
+0081:  BSF    03.5
+0082:  BCF    06.3
+0083:  BCF    03.5
+0084:  BSF    06.3
+0085:  GOTO   08A
+....................       else DATAL2; 
+0086:  BSF    03.5
+0087:  BCF    06.3
+0088:  BCF    03.5
+0089:  BCF    06.3
+....................       delay_us(20); 
+008A:  MOVLW  13
+008B:  MOVWF  77
+008C:  DECFSZ 77,F
+008D:  GOTO   08C
+008E:  GOTO   08F
+....................       WRH2; 
+008F:  BSF    03.5
+0090:  BCF    06.4
+0091:  BCF    03.5
+0092:  BSF    06.4
+....................       delay_us(20); 
+0093:  MOVLW  13
+0094:  MOVWF  77
+0095:  DECFSZ 77,F
+0096:  GOTO   095
+0097:  GOTO   098
+....................       sdata <<= 1; 
+0098:  BCF    03.0
+0099:  RLF    2B,F
+009A:  INCF   2D,F
+009B:  GOTO   072
+....................    } 
+....................    delay_us(20); 
+009C:  MOVLW  13
+009D:  MOVWF  77
+009E:  DECFSZ 77,F
+009F:  GOTO   09E
+00A0:  GOTO   0A1
+00A1:  RETURN
+.................... } 
+....................  
+.................... /**------------------------------------------------------------------------- 
+....................  
+....................          Name: SendCmd(send cmd) 
+....................          //Write MODE"100" AND 9 bits command 
+.................... ---------------------------------------------------------------------------*/ 
+....................  
+.................... void SendCmd_1621_2(uchar command) 
+.................... { 
+....................    CSL2; 
+00A2:  BSF    03.5
+00A3:  BCF    06.5
+00A4:  BCF    03.5
+00A5:  BCF    06.5
+....................    SendBit_1621_2(0x80, 4); 
+00A6:  MOVLW  80
+00A7:  MOVWF  2B
+00A8:  MOVLW  04
+00A9:  MOVWF  2C
+00AA:  CALL   071
+....................    SendBit_1621_2(command, 8); 
+00AB:  MOVF   25,W
+00AC:  MOVWF  2B
+00AD:  MOVLW  08
+00AE:  MOVWF  2C
+00AF:  CALL   071
+....................    CSH2; 
+00B0:  BSF    03.5
+00B1:  BCF    06.5
+00B2:  BCF    03.5
+00B3:  BSF    06.5
+00B4:  RETURN
+.................... } 
+.................... /**------------------------------------------------------------------------- 
+....................  
+....................          Name: Write_1621send data and cmd) 
+.................... ---------------------------------------------------------------------------*/ 
+....................  
+.................... void Write_1621_2(uchar addr, uchar sdata) 
+.................... { 
+....................    addr <<= 3; 
+*
+0113:  RLF    29,F
+0114:  RLF    29,F
+0115:  RLF    29,F
+0116:  MOVLW  F8
+0117:  ANDWF  29,F
+....................    CSL2; 
+0118:  BSF    03.5
+0119:  BCF    06.5
+011A:  BCF    03.5
+011B:  BCF    06.5
+....................    SendBit_1621_2(0xa0, 3);    //Write MODE"101" 
+011C:  MOVLW  A0
+011D:  MOVWF  2B
+011E:  MOVLW  03
+011F:  MOVWF  2C
+0120:  CALL   071
+....................    SendBit_1621_2(addr, 6);    //Write addr high 6 bits 
+0121:  MOVF   29,W
+0122:  MOVWF  2B
+0123:  MOVLW  06
+0124:  MOVWF  2C
+0125:  CALL   071
+....................    SendBit_1621_2(sdata, 8);   //Write data  8 bits 
+0126:  MOVF   2A,W
+0127:  MOVWF  2B
+0128:  MOVLW  08
+0129:  MOVWF  2C
+012A:  CALL   071
+....................    CSH2; 
+012B:  BSF    03.5
+012C:  BCF    06.5
+012D:  BCF    03.5
+012E:  BSF    06.5
+012F:  RETURN
+.................... } 
+....................  
+....................  
+.................... /**------------------------------------------------------------------------- 
+....................  
+....................             Name: all_off(Clear Display) 
+.................... ---------------------------------------------------------------------------*/ 
+....................  
+.................... void HT1621_all_off_2(uchar num) 
+*
+0140:  CLRF   27
+.................... { uchar i; 
+....................    uchar addr = 0; 
+....................    for (i = 0; i < num; i++) 
+0141:  CLRF   26
+0142:  MOVF   25,W
+0143:  SUBWF  26,W
+0144:  BTFSC  03.0
+0145:  GOTO   14E
+....................    { 
+....................       Write_1621_2(addr, 0x00); 
+0146:  MOVF   27,W
+0147:  MOVWF  29
+0148:  CLRF   2A
+0149:  CALL   113
+....................       addr += 1; 
+014A:  MOVLW  01
+014B:  ADDWF  27,F
+014C:  INCF   26,F
+014D:  GOTO   142
+....................    } 
+014E:  RETURN
+.................... } 
+.................... /**************************************************************************** 
+....................  
+....................             Name: all_on(All lit) 
+.................... ****************************************************************************/ 
+....................  
+.................... void HT1621_all_on_2(uchar num) 
+*
+0130:  CLRF   28
+.................... {  
+....................    uchar i, j; 
+....................    uchar addr = 0; 
+....................    for (i = 0; i < num; i++) 
+0131:  CLRF   26
+0132:  MOVF   25,W
+0133:  SUBWF  26,W
+0134:  BTFSC  03.0
+0135:  GOTO   13F
+....................    { Write_1621_2(addr, 0xff); 
+0136:  MOVF   28,W
+0137:  MOVWF  29
+0138:  MOVLW  FF
+0139:  MOVWF  2A
+013A:  CALL   113
+....................       addr += 1; 
+013B:  MOVLW  01
+013C:  ADDWF  28,F
+013D:  INCF   26,F
+013E:  GOTO   132
+....................    } 
+013F:  RETURN
+.................... }      /**************************************************************************** 
+....................  
+....................                   Name: all_on_num(All lit,Display the same number) 
+.................... ****************************************************************************/ 
+....................  
+.................... void HT1621_all_on_num_2(uchar num, uchar xx) 
+.................... {  
+....................    uchar i, j; 
+....................    uchar addr = 0; 
+....................    for (i = 0; i < num; i++) 
+....................    { Write_1621_2(addr, xx); 
+....................       addr += 1; 
+....................    } 
+.................... } 
+....................  
+.................... /**************************************************************************** 
+....................  
+....................             Name: Init_1621_2(initialize 1621) 
+.................... *****************************************************************************/ 
+....................  
+.................... void Init_1621_2(void) 
+.................... { 
+....................    SendCmd_1621_2(COMMAND_SYS_EN); 
+*
+00B5:  MOVLW  02
+00B6:  MOVWF  25
+00B7:  CALL   0A2
+....................    SendCmd_1621_2(COMMAND_RC256K); 
+00B8:  MOVLW  30
+00B9:  MOVWF  25
+00BA:  CALL   0A2
+....................    SendCmd_1621_2(COMMAND_BIAS_HALF_4_COM); 
+00BB:  MOVLW  50
+00BC:  MOVWF  25
+00BD:  CALL   0A2
+....................    SendCmd_1621_2(COMMAND_LCD_ON); 
+00BE:  MOVLW  06
+00BF:  MOVWF  25
+00C0:  CALL   0A2
+00C1:  GOTO   263 (RETURN)
+.................... } 
+.................... /**************************************************************************** 
+....................  
+....................             Name: LCDoff_2(off 1621) 
+.................... *****************************************************************************/ 
+....................  
+.................... void LCDoff_2(void) 
+.................... { 
+....................    SendCmd_1621_2(COMMAND_LCD_OFF); 
+.................... } 
+.................... /**************************************************************************** 
+....................  
+....................             Name: LCDon_2(on 1621) 
+.................... *****************************************************************************/ 
+....................  
+.................... void LCDon_2(void) 
+.................... { 
+....................    SendCmd_1621_2(COMMAND_LCD_ON); 
+.................... } 
+....................  
+....................  
+.................... void displayallnum_2(unsigned int n)       //Display all digital characters 
+.................... { uchar i, j; 
+....................    uchar addr = 0; 
+....................  
+....................    for (i = 0; i < n; i++) 
+....................    { for (j = 0; j < 27; j++) 
+....................       { 
+....................          Write_1621_2(addr, num[j]); delay_ms(100) ; 
+....................       } 
+....................       addr += 1; 
+....................    } 
+....................  
+.................... } 
+....................  
+....................  
+.................... //By-bit display 8 characters and decimal point 
+.................... void displayall8_2(void) 
+.................... { uchar i; 
+....................    HT1621_all_off_2(16); 
+....................    for (i = 0; i < 16; i++) 
+....................    { 
+....................       Write_1621_2(i, 0b11110111); 
+....................       delay_ms(50) ; 
+....................    } 
+.................... } 
+....................  
+.................... // 
+....................  
+.................... /**************************************************************************** 
+....................  
+.................... Name: displaydata_1(unsigned long int t) Display  data 
+.................... t : Data to be displayed 
+....................  
+.................... *****************************************************************************/ 
+....................  
+.................... void displaydata_2(unsigned int16 t) 
+.................... {  
+....................    dispnum[0] = num[(t / 100)%10]; 
+*
+01E5:  MOVF   26,W
+01E6:  MOVWF  2A
+01E7:  MOVF   25,W
+01E8:  MOVWF  29
+01E9:  CLRF   2C
+01EA:  MOVLW  64
+01EB:  MOVWF  2B
+01EC:  CALL   14F
+01ED:  MOVF   79,W
+01EE:  MOVWF  28
+01EF:  MOVF   78,W
+01F0:  MOVWF  27
+01F1:  MOVF   79,W
+01F2:  MOVWF  2A
+01F3:  MOVF   78,W
+01F4:  MOVWF  29
+01F5:  CLRF   2C
+01F6:  MOVLW  0A
+01F7:  MOVWF  2B
+01F8:  CALL   14F
+01F9:  MOVF   77,W
+01FA:  MOVWF  27
+01FB:  MOVF   7A,W
+01FC:  MOVWF  28
+01FD:  MOVWF  7A
+01FE:  MOVF   77,W
+01FF:  CALL   012
+0200:  MOVWF  78
+0201:  MOVWF  20
+....................    dispnum[1] = num[(t / 10)%10]; 
+0202:  MOVF   26,W
+0203:  MOVWF  2A
+0204:  MOVF   25,W
+0205:  MOVWF  29
+0206:  CLRF   2C
+0207:  MOVLW  0A
+0208:  MOVWF  2B
+0209:  CALL   14F
+020A:  MOVF   79,W
+020B:  MOVWF  28
+020C:  MOVF   78,W
+020D:  MOVWF  27
+020E:  MOVF   79,W
+020F:  MOVWF  2A
+0210:  MOVF   78,W
+0211:  MOVWF  29
+0212:  CLRF   2C
+0213:  MOVLW  0A
+0214:  MOVWF  2B
+0215:  CALL   14F
+0216:  MOVF   77,W
+0217:  MOVWF  27
+0218:  MOVF   7A,W
+0219:  MOVWF  28
+021A:  MOVWF  7A
+021B:  MOVF   77,W
+021C:  CALL   012
+021D:  MOVWF  78
+021E:  MOVWF  21
+....................    dispnum[2] = num[(t%10)]; 
+021F:  MOVF   26,W
+0220:  MOVWF  2A
+0221:  MOVF   25,W
+0222:  MOVWF  29
+0223:  CLRF   2C
+0224:  MOVLW  0A
+0225:  MOVWF  2B
+0226:  CALL   14F
+0227:  MOVF   77,W
+0228:  MOVWF  27
+0229:  MOVF   7A,W
+022A:  MOVWF  28
+022B:  MOVWF  7A
+022C:  MOVF   77,W
+022D:  CALL   012
+022E:  MOVWF  78
+022F:  MOVWF  22
+....................    if(t>=100) Write_1621_2(0, dispnum[0]); 
+0230:  MOVF   26,F
+0231:  BTFSS  03.2
+0232:  GOTO   237
+0233:  MOVF   25,W
+0234:  SUBLW  63
+0235:  BTFSC  03.0
+0236:  GOTO   23C
+0237:  CLRF   29
+0238:  MOVF   20,W
+0239:  MOVWF  2A
+023A:  CALL   113
+023B:  GOTO   23F
+....................    else Write_1621_2(0, 0); 
+023C:  CLRF   29
+023D:  CLRF   2A
+023E:  CALL   113
+....................    if(t>=10)  Write_1621_2(1, dispnum[1]); 
+023F:  MOVF   26,F
+0240:  BTFSS  03.2
+0241:  GOTO   246
+0242:  MOVF   25,W
+0243:  SUBLW  09
+0244:  BTFSC  03.0
+0245:  GOTO   24C
+0246:  MOVLW  01
+0247:  MOVWF  29
+0248:  MOVF   21,W
+0249:  MOVWF  2A
+024A:  CALL   113
+024B:  GOTO   250
+....................    else Write_1621_2(1, 0); 
+024C:  MOVLW  01
+024D:  MOVWF  29
+024E:  CLRF   2A
+024F:  CALL   113
+....................    if(t>=0)Write_1621_2(2, dispnum[2]); 
+0250:  MOVLW  02
+0251:  MOVWF  29
+0252:  MOVF   22,W
+0253:  MOVWF  2A
+0254:  CALL   113
+0255:  GOTO   2D6 (RETURN)
+....................     
+....................    //!    uchar i; 
+....................    //!  for (i = 0; i < 3 ; i++) 
+....................    //!  { 
+....................    //!    Write_1621_2(i, dispnum[i]); 
+....................    //!  } 
+.................... } 
+....................  
+....................  
+.................... void stop_display_2() 
+.................... { 
+....................  SendCmd_1621_2(COMMAND_LCD_OFF); 
+....................  SendCmd_1621_2(COMMAND_SYS_DIS); 
+.................... } 
+.................... void main() 
+0256:  MOVF   03,W
+0257:  ANDLW  1F
+0258:  MOVWF  03
+0259:  CLRF   24
+025A:  CLRF   23
+025B:  MOVLW  07
+025C:  MOVWF  1F
+025D:  BCF    03.7
+.................... {        
+....................       Init_1621_1() ; 
+*
+0261:  GOTO   064
+....................       Init_1621_2() ; 
+0262:  GOTO   0B5
+....................        
+....................       HT1621_all_on_1(16) ;      delay_ms(300) ; 
+0263:  MOVLW  10
+0264:  MOVWF  25
+0265:  CALL   0DF
+0266:  MOVLW  02
+0267:  MOVWF  25
+0268:  MOVLW  96
+0269:  MOVWF  26
+026A:  CALL   0EF
+026B:  DECFSZ 25,F
+026C:  GOTO   268
+....................       HT1621_all_off_1(16);      delay_ms(300) ; 
+026D:  MOVLW  10
+026E:  MOVWF  25
+026F:  CALL   104
+0270:  MOVLW  02
+0271:  MOVWF  25
+0272:  MOVLW  96
+0273:  MOVWF  26
+0274:  CALL   0EF
+0275:  DECFSZ 25,F
+0276:  GOTO   272
+....................       HT1621_all_on_1(16) ;      delay_ms(300) ; 
+0277:  MOVLW  10
+0278:  MOVWF  25
+0279:  CALL   0DF
+027A:  MOVLW  02
+027B:  MOVWF  25
+027C:  MOVLW  96
+027D:  MOVWF  26
+027E:  CALL   0EF
+027F:  DECFSZ 25,F
+0280:  GOTO   27C
+....................       HT1621_all_off_1(16);      delay_ms(300) ;       
+0281:  MOVLW  10
+0282:  MOVWF  25
+0283:  CALL   104
+0284:  MOVLW  02
+0285:  MOVWF  25
+0286:  MOVLW  96
+0287:  MOVWF  26
+0288:  CALL   0EF
+0289:  DECFSZ 25,F
+028A:  GOTO   286
+....................        
+....................       HT1621_all_on_2(16) ;      delay_ms(300) ; 
+028B:  MOVLW  10
+028C:  MOVWF  25
+028D:  CALL   130
+028E:  MOVLW  02
+028F:  MOVWF  25
+0290:  MOVLW  96
+0291:  MOVWF  26
+0292:  CALL   0EF
+0293:  DECFSZ 25,F
+0294:  GOTO   290
+....................       HT1621_all_off_2(16);      delay_ms(300) ; 
+0295:  MOVLW  10
+0296:  MOVWF  25
+0297:  CALL   140
+0298:  MOVLW  02
+0299:  MOVWF  25
+029A:  MOVLW  96
+029B:  MOVWF  26
+029C:  CALL   0EF
+029D:  DECFSZ 25,F
+029E:  GOTO   29A
+....................       HT1621_all_on_2(16) ;      delay_ms(300) ; 
+029F:  MOVLW  10
+02A0:  MOVWF  25
+02A1:  CALL   130
+02A2:  MOVLW  02
+02A3:  MOVWF  25
+02A4:  MOVLW  96
+02A5:  MOVWF  26
+02A6:  CALL   0EF
+02A7:  DECFSZ 25,F
+02A8:  GOTO   2A4
+....................       HT1621_all_off_2(16);      delay_ms(300) ; 
+02A9:  MOVLW  10
+02AA:  MOVWF  25
+02AB:  CALL   140
+02AC:  MOVLW  02
+02AD:  MOVWF  25
+02AE:  MOVLW  96
+02AF:  MOVWF  26
+02B0:  CALL   0EF
+02B1:  DECFSZ 25,F
+02B2:  GOTO   2AE
+....................        
+....................       enable_interrupts(INT_TIMER1); 
+02B3:  BSF    03.5
+02B4:  BSF    0C.0
+....................       enable_interrupts(GLOBAL); 
+02B5:  MOVLW  C0
+02B6:  BCF    03.5
+02B7:  IORWF  0B,F
+....................       time_left=10; 
+02B8:  CLRF   24
+02B9:  MOVLW  0A
+02BA:  MOVWF  23
+....................        
+....................    While(true) 
+....................    { 
+....................      if(time_left<=1) time_left=999; 
+02BB:  MOVF   24,F
+02BC:  BTFSS  03.2
+02BD:  GOTO   2C6
+02BE:  MOVF   23,W
+02BF:  SUBLW  01
+02C0:  BTFSS  03.0
+02C1:  GOTO   2C6
+02C2:  MOVLW  03
+02C3:  MOVWF  24
+02C4:  MOVLW  E7
+02C5:  MOVWF  23
+....................      while(time_left>0) 
+02C6:  MOVF   23,F
+02C7:  BTFSS  03.2
+02C8:  GOTO   2CC
+02C9:  MOVF   24,F
+02CA:  BTFSC  03.2
+02CB:  GOTO   2EE
+....................      {    
+....................           
+....................          displaydata_1(time_left); 
+02CC:  MOVF   24,W
+02CD:  MOVWF  26
+02CE:  MOVF   23,W
+02CF:  MOVWF  25
+02D0:  GOTO   174
+....................          displaydata_2(time_left); 
+02D1:  MOVF   24,W
+02D2:  MOVWF  26
+02D3:  MOVF   23,W
+02D4:  MOVWF  25
+02D5:  GOTO   1E5
+....................           
+....................          time_left--; 
+02D6:  MOVF   23,W
+02D7:  BTFSC  03.2
+02D8:  DECF   24,F
+02D9:  DECF   23,F
+....................          if(time_left>1) 
+02DA:  MOVF   24,F
+02DB:  BTFSS  03.2
+02DC:  GOTO   2E1
+02DD:  MOVF   23,W
+02DE:  SUBLW  01
+02DF:  BTFSC  03.0
+02E0:  GOTO   2ED
+....................          { 
+....................          delay_ms(1000); 
+02E1:  MOVLW  04
+02E2:  MOVWF  25
+02E3:  MOVLW  FA
+02E4:  MOVWF  26
+02E5:  CALL   0EF
+02E6:  DECFSZ 25,F
+02E7:  GOTO   2E3
+....................          output_toggle(PIN_A1); 
+02E8:  BSF    03.5
+02E9:  BCF    05.1
+02EA:  MOVLW  02
+02EB:  BCF    03.5
+02EC:  XORWF  05,F
+....................          } 
+02ED:  GOTO   2C6
+....................           
+....................      } 
+02EE:  GOTO   2BB
+....................    } 
+.................... } 
+02EF:  SLEEP
+
+Configuration Fuses:
+   Word  1: 3F62   NOWDT PUT HS MCLR BROWNOUT NOLVP NOCPD NOPROTECT

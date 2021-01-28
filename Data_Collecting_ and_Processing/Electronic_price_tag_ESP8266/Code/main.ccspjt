@@ -1,0 +1,85 @@
+[PROJECT]
+Target=main.hex
+Processor_Text=PIC16F628
+CCSVerions=5.025
+Compiler=PCM
+CCSVersion=5.025
+[Target Data]
+FileList=main.c
+[Directories]
+Include=
+[C:\Users\Vu Quan\Desktop\File Mach\PIC+LCD_NEW\Code\main]
+Type=4
+[mru-list]
+1=main.c
+
+[ProjectLog]
+Days=3
+D1=26-10-2016
+D1_L=16
+D1_L1=[41562]Project Opened.
+D1_L2=[41567]Started Editing.
+D1_L3=[42401]Stopped Editing.
+D1_L4=[42602]Started Editing.
+D1_L5=[44449]Stopped Editing.
+D1_L6=[49213]Started Editing.
+D1_L7=[51784]Stopped Editing.
+D1_L8=[52209]Started Editing.
+D1_L9=[54051]Stopped Editing.
+D1_L10=[54271]Started Editing.
+D1_L11=[54790]Stopped Editing.
+D1_L12=[54890]Started Editing.
+D1_L13=[55600]Stopped Editing.
+D1_L14=[55956]Started Editing.
+D1_L15=[56439]Stopped Editing.
+TotalEdit=141
+TotalDebug=0
+D1_E=112
+D1_D=0
+D1_L16=[58999]Project Closed.
+D2=09-11-2016
+D2_L=16
+D2_L1=[40098]Project Opened.
+D2_L2=[40174]Started Editing.
+D2_L3=[40474]Stopped Editing.
+D2_L4=[42589]Started Editing.
+D2_L5=[42898]Stopped Editing.
+D2_L6=[54856]Started Editing.
+D2_L7=[55157]Stopped Editing.
+D2_L8=[55241]Started Editing.
+D2_L9=[55545]Stopped Editing.
+D2_L10=[56758]Started Editing.
+D2_L11=[57061]Stopped Editing.
+D2_L12=[57139]Started Editing.
+D2_L13=[57598]Stopped Editing.
+D2_L14=[57802]Started Editing.
+D2_L15=[58839]Stopped Editing.
+D2_E=16
+D2_D=0
+D2_L16=[63402]Project Closed.
+D3=11-11-2016
+D3_L=12
+D3_L1=[35050]Project Opened.
+D3_L2=[35094]Started Editing.
+D3_L3=[35622]Stopped Editing.
+D3_L4=[35736]Started Editing.
+D3_L5=[36376]Stopped Editing.
+D3_L6=[37155]Started Editing.
+D3_L7=[37473]Stopped Editing.
+D3_L8=[37646]Started Editing.
+D3_L9=[37946]Stopped Editing.
+D3_L10=[39192]Started Editing.
+D3_L11=[39647]Stopped Editing.
+D3_E=13
+D3_D=0
+D3_L12=[41741]Project Closed.
+
+[Opened Files]
+1=main.c
+2=
+3=
+[main.c]
+Type=4
+[Units]
+Count=1
+1=main (main)

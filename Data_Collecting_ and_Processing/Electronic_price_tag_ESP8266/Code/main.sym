@@ -1,0 +1,108 @@
+004-005 @READ_PROGRAM_MEMORY8.P1
+015     CCP_1_LOW
+015     CCP_1
+016     CCP_1_HIGH
+01F.6   C1OUT
+01F.7   C2OUT
+020-022 dispnum
+023-024 time_left
+025     SendCmd_1621_2.command
+025     SendCmd_1621_1.command
+025     HT1621_all_off_1.num_small
+025-026 displaydata_2.t
+025     HT1621_all_on_2.num
+025     HT1621_all_off_2.num
+025-026 displaydata_1.t
+025     HT1621_all_on_1.num_small
+025     MAIN.@SCRATCH1
+026     HT1621_all_on_1.i
+026     HT1621_all_off_2.i
+026     @delay_ms1.P1
+026     HT1621_all_off_1.i
+026     HT1621_all_on_2.i
+027     HT1621_all_off_2.addr
+027     HT1621_all_on_2.j
+027     HT1621_all_on_1.j
+027     HT1621_all_off_1.addr
+027     displaydata_1.@SCRATCH1
+027     displaydata_2.@SCRATCH1
+028     HT1621_all_on_2.addr
+028     HT1621_all_on_1.addr
+028     displaydata_1.@SCRATCH2
+028     displaydata_2.@SCRATCH2
+029     Write_1621_1.addr
+029-02A @DIV1616.P1
+029     Write_1621_2.addr
+02A     Write_1621_1.sdata
+02A     Write_1621_2.sdata
+02B-02C @DIV1616.P1
+02B     SendBit_1621_2.sdata
+02B     SendBit_1621_1.sdata
+02C     SendBit_1621_1.cnt
+02C     SendBit_1621_2.cnt
+02D     SendBit_1621_1.i
+02D     SendBit_1621_2.i
+02D     @DIV1616.@SCRATCH1
+077     @SCRATCH
+078     @SCRATCH
+078     _RETURN_
+079     @SCRATCH
+07A     @SCRATCH
+09B-09C @READ_PROGRAM_MEMORY8.P1
+
+ROM Allocation:
+000004  num_small.call
+000008  num_small.data
+000012  num.call
+000016  num.data
+000020  SendBit_1621_1
+000051  SendCmd_1621_1
+000064  Init_1621_1
+000071  SendBit_1621_2
+0000A2  SendCmd_1621_2
+0000B5  Init_1621_2
+0000C2  Write_1621_1
+0000DF  HT1621_all_on_1
+0000EF  @delay_ms1
+000104  HT1621_all_off_1
+000113  Write_1621_2
+000130  HT1621_all_on_2
+000140  HT1621_all_off_2
+00014F  @DIV1616
+000174  displaydata_1
+0001E5  displaydata_2
+000256  @cinit1
+000256  MAIN
+00025D  @cinit2
+
+Project Directory:
+    C:\Users\Vu Quan\Desktop\File Mach\PIC+LCD_NEW\Code\
+
+Project Files:
+    main.c                                                  [11-Nov-16 10:55  CRC=E27F5863]
+    ..\..\..\..\..\..\Program Files (x86)\PICC\Devices\16F628.h [18-Apr-14 16:56  CRC=1055E529]
+
+Source signature=032B22B5
+
+Units:
+    main (main)
+
+Compiler Settings:
+    Processor:      PIC16F628
+    Pointer Size:   16
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+    Compile Mode:       CCS5
+
+Output Files:
+    XREF file:   main.xsym
+    Errors:      main.err
+    Ext Symbols: main.esym
+    INHX8:       main.hex
+    Symbols:     main.sym
+    List:        main.lst
+    Debug/COFF:  main.cof
+    Project:     main.ccspjt
+    Call Tree:   main.tre
+    Statistics:  main.STA

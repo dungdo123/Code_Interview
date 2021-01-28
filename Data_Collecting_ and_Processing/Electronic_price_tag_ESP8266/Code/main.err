@@ -1,0 +1,9 @@
+>>> Warning 203 "main.c" Line 259(1,1): Condition always TRUE
+>>> Warning 203 "main.c" Line 446(1,1): Condition always TRUE
+>>> Warning 202 "main.c" Line 162(13,14): Variable never used:   j
+>>> Warning 202 "main.c" Line 175(13,14): Variable never used:   j
+>>> Warning 202 "main.c" Line 349(13,14): Variable never used:   j
+>>> Warning 202 "main.c" Line 362(13,14): Variable never used:   j
+      Memory usage:   ROM=37%      RAM=5% - 8%
+      0 Errors,  6 Warnings.
+Build Successful.
