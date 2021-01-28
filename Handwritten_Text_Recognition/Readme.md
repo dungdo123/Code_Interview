@@ -2,7 +2,7 @@
 
 The objective of this project is to build a real-time handwritten/printed text system. The proposed architecture is shown as below:
 
-<img src="https://github.com/dungdo123/Code_Interview/blob/main/Handwritten_Text_Recognition/images/system.PNG" width="600" height="100"/>
+<img src="https://github.com/dungdo123/Code_Interview/blob/main/Handwritten_Text_Recognition/images/system.PNG" width="600" height="200"/>
 
 To make the system work, we have to solve 2 sub-problems:
 
@@ -10,7 +10,7 @@ To make the system work, we have to solve 2 sub-problems:
 
 The architecture of HTR DL model can be described as below:
 
-<img src="https://github.com/dungdo123/Code_Interview/blob/main/Handwritten_Text_Recognition/images/model.PNG" width="600" height="200"/>
+<img src="https://github.com/dungdo123/Code_Interview/blob/main/Handwritten_Text_Recognition/images/model.PNG" width="600" height="300"/>
 
 The model can be trained from scratch or by transfer learning.
 The details of model and training process is given in the project [1]
