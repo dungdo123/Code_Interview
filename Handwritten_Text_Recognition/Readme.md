@@ -1,6 +1,6 @@
 # Description
 
-The objective of this project is to build a real-time handwritten/printed text system. The proposed architecture is shown as below:
+The objective of this project is to build a real-time handwritten/printed text recognition system. The proposed architecture is shown as below:
 
 <img src="https://github.com/dungdo123/Code_Interview/blob/main/Handwritten_Text_Recognition/images/system.PNG" width="600" height="200"/>
 
